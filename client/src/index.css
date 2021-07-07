@@ -1,0 +1,194 @@
+html, body{
+  height: 100%;
+  max-width: 100%;
+}
+.l{
+  color: #e2403e;
+}
+body{
+  background-color: #F8F9FA;
+}
+a{
+  color: grey;
+}
+.containerls{
+  width: 1000px;
+}
+.create-account a{
+  font-size: 18px;
+}
+
+.login, .register{
+  height: 100%;
+}
+.login-a{
+  color: #e2403e;
+}
+.login-a:hover{
+  color: #e2403e;
+}
+@media (max-width: 789px) {
+  .container{
+    width: auto;
+  }
+  .test{
+    height: 50px;
+  }
+}
+
+.LogoMenu{
+  font-size: 30px;
+  font-weight: bold;
+}
+.tasks-profile{
+  font-size: 23px;
+}
+.tasks-profile a {
+  padding-top: 12px;
+}
+.content-task{
+  border-radius: 20px;
+}
+.content-task a{
+  text-decoration: none;
+  color: black;
+}
+.list-topics li a{
+  text-decoration: none;
+  color: grey;
+}
+.list-topics li {
+  list-style: none;
+  font-size: 20px;
+}
+.list-topics button {
+  background: none;
+  border: none;
+}
+.list-topics button:hover {
+  color: #e2403e;
+}
+.navbar-points{
+  color: #e2403e;
+}
+.topicx{
+  background-color: #e2403e;
+  border-radius: 20px;
+  color: white;
+}
+.points{
+  color: #e2403e;
+}
+.reward{
+  color: grey;
+}
+.Validated{
+  background-color: #3eff38;
+  border-radius: 20px;
+  color: white;
+}
+
+.Invalid{
+  background-color: #e2403e;
+  border-radius: 20px;
+  color: white;
+}
+
+.review{
+  background-color: #dbdf00d8;
+  border-radius: 20px;
+  color: white;
+}
+.profile-container{
+  width: 900px;
+  border-radius: 20px;
+}
+.profile-container button{
+  border-radius: 20px;
+}
+.profile-container .credit{
+    color: grey;
+}
+.profile-container .pt{
+  color: #e2403e;
+}
+.profile-container .dollar{
+  color: grey;
+}
+@media (max-width: 789px) {
+  .profile-container{
+    width: auto;
+  }
+}
+@media (max-width: 789px) {
+  .container-navbar{
+    width: 100%;
+  }
+}
+.tasks-profile a{
+  text-decoration: none;
+  
+}
+.tasks-profile a:hover, .list-topics a:hover{
+  color: #e2403e !important;
+}
+.active{
+  color: #e2403e;
+}
+
+.firstDiv{
+  margin-top: 100px;
+}
+.profile-containerr button{
+    background: none;
+    color: #e2403e;
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+
+.profile-containerr button:active{
+  background: none !important;
+  color: #e2403e !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.profile-containerr button:hover{
+  background: none !important;
+  color: #971919 !important;
+  border: none !important;
+  outline: none !important;
+}
+.profile-containerr button:focus{
+  background: none !important;
+  color: #e2403e !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+small{
+  color: gray;
+}
+
+.content-task button{
+  background: none;
+  border: none;
+}
+.content-task button i:hover{
+  color: #e2403e;
+}
+
+.VolumeBar > * { background-color:#e2403e !important; }
+.VolumeBar{background-color: rgba(255, 0, 0, 0.2 ) !important ;}
+
+.notification{
+  margin-right: 70px;
+}
+
+.filter-post{
+  margin-left: 140px;
+  
+}

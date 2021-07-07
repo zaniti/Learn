@@ -1,0 +1,167 @@
+
+/*======================
+    404 page
+=======================*/
+
+.bodyWhite{
+	background-color: white;
+}
+.notfound a{
+    background-color: #e2403e;
+}
+.page_404  img{ width:100%;}
+
+.four_zero_four_bg{
+ 
+ background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+    height: 400px;
+    background-position: center;
+ }
+ 
+ 
+.four_zero_four_bg h1{
+ font-size:80px;
+ }
+ .four_zero_four_bg h3{
+			 font-size:80px;
+			 }
+			 
+			 .link_404{			 
+	color: #fff!important;
+    padding: 10px 20px;
+    background: #39ac31;
+    margin: 20px 0;
+    display: inline-block;}
+	.contant_box_404{ margin-top:-50px;}
+
+
+
+/*======================
+    403 page
+=======================*/
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+.denied {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background: #eceff1;
+  font-family: Montserrat, sans-serif;
+}
+
+.refused {
+  background: white;
+  height: auto;
+  width: 40vw;
+  padding: 1.5rem;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.refused h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  margin-top: 1rem;
+  color: #263238;
+  opacity: 0;
+  transform: translateX(-0.1rem);
+  animation: fadeIn 1s forwards 1.5s;
+}
+.refused p {
+  margin: 0;
+  margin-top: 0.5rem;
+  color: #546e7a;
+  opacity: 0;
+  transform: translateX(-0.1rem);
+  animation: fadeIn 1s forwards 1.75s;
+}
+
+@media screen and (max-width: 768px) {
+  .refused {
+    width: 50vw;
+  }
+}
+@media screen and (max-width: 600px) {
+  .refused {
+    width: 60vw;
+  }
+}
+@media screen and (max-width: 500px) {
+  .refused {
+    width: 80vw;
+  }
+}
+@keyframes fadeIn {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
+}
+.forbidden-sign {
+  margin: auto;
+  width: 4.6666666667rem;
+  height: 4.6666666667rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ef5350;
+  animation: grow 1s forwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.forbidden-sign::before {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  content: "";
+  width: 4rem;
+  height: 4rem;
+  transform: scale(0);
+  animation: grow2 0.5s forwards 0.5s;
+}
+.error-link{
+    text-decoration: none !important;
+    font-size: 20px;
+}
+@keyframes grow2 {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+/* slash */
+.forbidden-sign::after {
+  content: "";
+  z-index: 2;
+  position: absolute;
+  width: 4rem;
+  height: 0.3333333333rem;
+  transform: scaley(0) rotateZ(0deg);
+  background: #ef5350;
+  animation: grow3 0.5s forwards 1s;
+}
+
+@keyframes grow3 {
+  from {
+    transform: scaley(0) rotateZ(0deg);
+  }
+  to {
+    transform: scaley(1) rotateZ(-45deg);
+  }
+}
