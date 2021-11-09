@@ -1,3 +1,4 @@
+import answerModel from '../models/answer.js';
 import problemModel from '../models/problem.js';
 import topicModel from '../models/topic.js';
 
@@ -42,14 +43,20 @@ export const getProblem = async (req, res) =>{
 //delete problem
 export const deleteProblem = async (req, res) => {
 
-    await problemModel.findByIdAndRemove(req.body.id, (err) => {
-
+    await answerModel.deleteMany({ id_problem: req.body.id}, (err) => {
         if(err){
             res.send(err);
         } else {
-            res.send('problem deleted!!');
+                problemModel.findByIdAndRemove(req.body.id, (err) => {
+                console.log(req.body)
+                if(err){
+                    res.send(err);
+                } else {
+                    res.send('topic deleted!!');
+                }
+            })
         }
-    })
+    });
         
 
 }

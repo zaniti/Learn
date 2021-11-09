@@ -1,63 +1,79 @@
 import axios from 'axios';
 
 import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
 const Test = () => {
-    const [problems, setProblems] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [pageNumber, setPageNumber] = useState(0);
+    const postPerPage = 2;
+    const pagesVisited = pageNumber * postPerPage;
+    const [displayPost, setDisplayPost] = useState('');
+    
     const [topics, setTopics] = useState('');
-    const [search, setSearch] = useState('');
-    const [filteredPosts, setFiltedPosts] = useState([]);
+    const [problems, setProblems] = useState('');
+    const [data , setData] = useState(true);
+
+    
+
+      
     useEffect(() => {
         
-        // get all posts
-        const dataOne = axios.get("http://localhost:5000/topic");
-        const dataTwo = axios.get("http://localhost:5000/problem");
 
-        axios.all([dataOne, dataTwo]).then(
-            axios.spread((topics, problems) => {
-                setTopics(topics.data);
-                setProblems(problems.data);
-                setIsLoading(false);
-            })
-        )
+            const dataOne = axios.get("http://localhost:5000/topic");
+            const dataTwo = axios.get("http://localhost:5000/problem");
+    
+            axios.all([dataOne, dataTwo]).then(
+                axios.spread((topics, problems) => {
+                    setTopics(topics.data);
+                    setProblems(problems.data);
+                    setData(false);
+                })
+            )
+            
+            if(!data){
+                setDisplayPost(
+                    problems
+                    .slice(pagesVisited, pagesVisited + postPerPage)
+                    .map((problem) => {
+                    return (
+                        <div className="user">
+                        <h3>{problem.name}</h3>
+                        </div>
+                    );
+                    })
+                )
+            }
 
 
     }, [problems]);
 
-console.log(problems)
-    useEffect(() => {
-        if(problems){
-            setFiltedPosts(
-                problems.filter((problem) =>
-                  problem.name.toLowerCase().includes(search.toLowerCase())
-                )
-              );
-        }
-        
-      }, [search, problems]);
+    const pageCount = Math.ceil(problems.length / postPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+      };
+    // console.log(displayPost)
 
     return(
         
         <div className="test">
            
-        <h1>test page</h1>
-        <input
-                    type="text"
-                    placeholder="Search posts"
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-        {isLoading && <p>Loading...</p>}
-        {!isLoading &&  
+            <h1>test page</h1>
+            {!data && displayPost}
 
-        <div className="container">
-            {filteredPosts.map((problem, index) => 
-            <h3>{problem.name}</h3> )}
-            
+            <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={pageCount}
+            onPageChange={changePage}
+            containerClassName={"paginationBttns"}
+            previousLinkClassName={"previousBttn"}
+            nextLinkClassName={"nextBttn"}
+            disabledClassName={"paginationDisabled"}
+            activeClassName={"paginationActive"}
+            />
         </div>
-        }
-       
-    </div>
     )
     
     

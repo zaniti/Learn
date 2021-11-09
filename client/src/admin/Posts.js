@@ -7,7 +7,8 @@ import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactNotification from 'react-notifications-component';
 import { store } from 'react-notifications-component';
-import 'react-notifications-component/dist/theme.css'
+import 'react-notifications-component/dist/theme.css';
+import ReactPaginate from "react-paginate";
 
 
 const Posts = () => {
@@ -44,6 +45,11 @@ const Posts = () => {
     
 
     const [selectError, setSelectError] = useState(false);
+
+    //pagination 
+    const [pageNumber, setPageNumber] = useState(0);
+    const postPerPage = 3;
+    const pagesVisited = pageNumber * postPerPage;
 
     useEffect(() => {
         
@@ -190,6 +196,10 @@ const Posts = () => {
             });
 
     }
+    const pageCount = Math.ceil(problems.length / postPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
 
     return ( 
         <div className="posts">
@@ -203,7 +213,9 @@ const Posts = () => {
 
                     <div className=" filter-post d-flex justify-content-between w-75">
                         <h1 className="text-danger my-auto">Posts page</h1>
-
+                        <Button variant="danger" onClick={handleShowAddPost}>
+                                            Add new post
+                                        </Button>
                         <div className="my-auto">
                         <input
                             className="form-control"
@@ -227,7 +239,7 @@ const Posts = () => {
 
                     <div className="col-9 mx-auto">
 
-                        {filteredPosts.map((problem, index) => 
+                        {filteredPosts.slice(pagesVisited, pagesVisited + postPerPage).map((problem, index) => 
                             
                             <div className="post-list content-task bg-white p-4 shadow mb-5" key={index} id={problem.id_topic.name} >
                            
@@ -267,12 +279,25 @@ const Posts = () => {
                             </div>
             
                         )}
-
+                            
                                     <div className="text-center mb-3">
-
-                                        <Button variant="danger" onClick={handleShowAddPost}>
-                                            Add new post
-                                        </Button>
+                                        <div>
+                                            <ReactPaginate
+                                            previousLabel={"Previous"}
+                                            nextLabel={"Next"}
+                                            breakLabel={'...'}
+                                            breakClassName={'break-me'}
+                                            pageCount={pageCount}
+                                            onPageChange={changePage}
+                                            containerClassName={"paginationBttns"}
+                                            previousLinkClassName={"previousBttn"}
+                                            nextLinkClassName={"nextBttn"}
+                                            disabledClassName={"paginationDisabled"}
+                                            activeClassName={"paginationActive"}
+                                            />
+                                        </div>
+                                    
+                                        
 
                                         <Modal show={showAddPost} onHide={handleCloseAddPost}>
                                         <form onSubmit={e => handlePostSubmit(e)}>

@@ -7,6 +7,13 @@ import jwt_decode from "jwt-decode";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import LoadingBar from "./LoadingBar";
+import ReactNotification from 'react-notifications-component';
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import SchemaValidationPassword from "./validation/UpdatePassword";
+import { useFormik } from "formik";
+
+
 
 const Profile = () => {
     Verify();
@@ -15,8 +22,8 @@ const Profile = () => {
     const [email, SetEmail] = useState('');
     const [name, SetName] = useState('');
     const [username, SetUsername] = useState('');
-    const [password, SetPassword] = useState('');
-    const [passwordTwo, SetPasswordTwo] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [verifyOldPassword, setVerifyOldPassword] = useState(false);
 
     const [showEmail, setShowEmail] = useState(false);
     const handleCloseEmail = () => setShowEmail(false);
@@ -37,7 +44,6 @@ const Profile = () => {
     const [isPending, setIsPending] = useState(true);
 
     const [emailExist, setEmailExist] = useState(false);
-    const [passwordMatch, setPasswordMatch] = useState(false);
     const [validUsername, setValidUsername] = useState(false);
     const [data, setData] = useState('');
     const [points, setPoints] = useState('');
@@ -47,9 +53,11 @@ const Profile = () => {
     let token = localStorage.getItem('user');
     let decoded = jwt_decode(token);
 
+
     const usernameReg = new RegExp(/^\S*$/);
 
     const [errorPayment, setErrorPayment] = useState(true);
+
 
 // get data from database
     useEffect(() => {
@@ -85,6 +93,19 @@ const Profile = () => {
                     handleCloseName();
                     handleCloseUsername();
                     handleClosePassword();
+                    store.addNotification({
+                        title: "Notification!",
+                        message: "Your information was updated successfully",
+                        type: "info",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                          duration: 2000,
+                          onScreen: true
+                        }
+                      });
                 }
                 
             }).catch(err => {
@@ -102,33 +123,79 @@ const Profile = () => {
             }).then((res) => {
                 setEmailExist(false);
                 handleCloseEmail();
+                store.addNotification({
+                    title: "Notification!",
+                    message: "Email updated successfully",
+                    type: "info",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+
             }).catch(err => {
                 setEmailExist(true);
                 console.log('Error: ',err.message);
             } );
     };
 
-    const handleFormPassword = (e) => {
-        e.preventDefault();
-        const data = {id: decoded.id, password };
-        axios({
+    const formik = useFormik({
+        initialValues: {
+            password: '',
+            passwordTwo: ''
+        },
+        onSubmit: (values) => {
+          const ps = {id: decoded.id, old: oldPassword, password: values.password, passwordTwo: values.passwordTwo };
+          axios({
             method: 'post',
-            url: 'http://localhost:5000/updatepassword',
-            data: data
-            }).then((res) => {
-                if(password === passwordTwo){
-                    SetPassword('');
-                    SetPasswordTwo('');
-                    setPasswordMatch(false);
-                    handleClosePassword();
+            url: 'http://localhost:5000/update/password/old',
+            data: ps
+            }).then((res) => { 
+
+                if(res.data){
+                    setVerifyOldPassword(false);
+                    axios({
+                        method: 'post',
+                        url: 'http://localhost:5000/updatepassword',
+                        data: ps
+                        }).then(res => {
+
+                                setVerifyOldPassword(false);
+                                values.password = '';
+                                values.passwordTwo = '';
+                                setOldPassword('');
+                                handleClosePassword();
+                                store.addNotification({
+                                    title: "Notification!",
+                                    message: "Password updated successfully",
+                                    type: "info",
+                                    insert: "top",
+                                    container: "top-right",
+                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                    dismiss: {
+                                    duration: 2000,
+                                    onScreen: true
+                                    }
+                                });
+                            }
+                        ).catch(err => {
+                            console.log('Error: ',err.message)
+                        } );
                 }else{
-                    setPasswordMatch(true);
-                    console.log('password not match')
+                    setVerifyOldPassword(true);
                 }
             }).catch(err => {
                 console.log('Error: ',err.message)
             } );
-    };
+ 
+        },
+        validationSchema: SchemaValidationPassword
+    })
 
     const handlePayment = (e) =>{
       
@@ -145,6 +212,20 @@ const Profile = () => {
             axios.all([dataOne, dataTwo])
             .then(res =>{
                 setErrorPayment(false);
+                store.addNotification({
+                    title: "Notification!",
+                    message: "Your  payment request has been submitted successfully",
+                    type: "info",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+
             });
                    
             
@@ -165,9 +246,11 @@ const Profile = () => {
         
         <div className="profile">
             <NavBar />
-            {isPending && <div> <LoadingBar /> </div>}
             
+            {isPending && <div> <LoadingBar /> </div>}
+            <ReactNotification  />
             {!isPending && 
+            
             <div className="profile-containerr container profile-container mt-5 bg-white shadow p-5">
             
                 <div className="row px-5">
@@ -346,25 +429,39 @@ const Profile = () => {
                     onHide={handleClosePassword}
                     backdrop="static"
                     keyboard={false}
-                >   <form onSubmit={handleFormPassword}>
+                >   <form onSubmit={formik.handleSubmit}>
                     <Modal.Header closeButton>
                     <Modal.Title>Change password</Modal.Title>
                     
                     </Modal.Header>
                     <Modal.Body>
                     <div className="form-group">
+
+                        <label for="oldpassword">Old password</label>
+                        <input type="password" class="form-control" id="oldpassword"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)} 
+                                required/>
+                        {verifyOldPassword && <p className="text-danger mt-2 ml-2">Password Incorrect!!</p>}
+
                         <label for="password">New password</label>
-                        <input type="password" class="form-control" id="password"
-                        value={password}
-                        onChange={(e) => SetPassword(e.target.value)} 
-                        required/>
+                        <input type="password" class="form-control" id="password" name="password"
+                                    
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.password && <div class="text-danger mt-3">{formik.errors.password}</div>}
 
                         <label for="password" className="mt-3">Confirm password</label>
-                        <input type="password" class="form-control" id="passwordtwo" required
-                        value={passwordTwo}
-                        onChange={(e) => SetPasswordTwo(e.target.value)}
+                        <input type="password" class="form-control" id="passwordtwo" name="passwordTwo"
+
+                                value={formik.values.passwordTwo}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                        
                         />
-                        {passwordMatch && <p className="text-danger mt-2 ml-2">Password not match!!</p>}
+                        {formik.touched.passwordTwo && <div class="text-danger mt-3">{formik.errors.passwordTwo}</div>}
                         
                     </div>
                     </Modal.Body>

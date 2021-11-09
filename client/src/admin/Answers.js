@@ -95,27 +95,7 @@ const Answers = () => {
                           resolve();
                         }, 1000)
                       }),
-                    //   onRowDelete: oldData =>
-                    //   new Promise((resolve, reject) => {
-                    //     setTimeout(() => {
-                    //       const dataDelete = [...data];
-                    //       const index = oldData.tableData.id;
-                    //       let id = oldData._id;
-                    //       dataDelete.splice(index, 1);
-                    //       setData([...dataDelete]);
-                    //       axios({
-                    //         method: 'post',
-                    //         url: 'http://localhost:5000/admindelete',
-                    //         data : {id: id}
-                    //         }).then((res) => {
-                    //             console.log(res)
-                    //         }).catch(err => {
-                    //             console.log(err.message)
-                    //         });
-                          
-                    //       resolve()
-                    //     }, 1000)
-                    //   }),
+
                     
                     }
                   }

@@ -192,3 +192,47 @@ small{
   margin-left: 140px;
   
 }
+
+.paginationBttns {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationBttns a {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 5px;
+  border: 1px solid #e2403e;
+  color: #e2403e;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}
+
+.paginationBttns a:hover {
+  color: white !important;
+  background-color: #e2403e;
+}
+
+.paginationActive a {
+  color: white !important;
+  background-color: #e2403e !important;
+}
+
+.paginationDisabled a {
+  color: grey !important;
+  background: #dddddd;
+  cursor: default;
+
+}
+.paginationDisabled a:hover {
+  color: grey !important;
+  background: #dddddd;
+  cursor: default;
+}
+.all-topics{
+  height: 200px;
+}

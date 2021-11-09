@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useParams } from "react-router";
 import jwt_decode from "jwt-decode";
 import LoadingBar from "./LoadingBar";
+import ReactNotification from 'react-notifications-component';
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css'
 
 const Question = () => {
 
@@ -18,13 +21,13 @@ const Question = () => {
 
     let token = localStorage.getItem('user');
     let decoded = jwt_decode(token);
-
+    
     useEffect(() => {
 
-        const dataOne = axios.post("http://localhost:5000/problemid", {id});
-        const dataTwo = axios.post("http://localhost:5000/answercount", {id});
-        const dataThree = axios.post("http://localhost:5000/answercount/valid", {id});
-
+        const dataOne = axios.post("http://localhost:5000/problemid", {id, id_user: decoded.id});
+        const dataTwo = axios.post("http://localhost:5000/answercount", {id, id_user: decoded.id});
+        const dataThree = axios.post("http://localhost:5000/answercount/valid", {id, id_user: decoded.id});
+        
         axios.all([dataOne, dataTwo, dataThree] ).then(
             axios.spread((problem, answer, valid) => {
                 setProblem(problem.data);
@@ -33,10 +36,11 @@ const Question = () => {
                 setIsLoading(false);
             })
         )
-    }, [])
+    }, [problem])
 
     
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if(message === ''){
             const data = {
                 id_user: decoded.id,
@@ -49,9 +53,20 @@ const Question = () => {
                 url: 'http://localhost:5000/answer',
                 data: data
                 }).then((res) => {
-                    console.log('sent')
-                }).catch(err => {
-                    
+                    store.addNotification({
+                        title: "Notification!",
+                        message: "Response sent successfully!!",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            onScreen: true
+                        }
+                    });
+                }).catch(err => {  
                     console.log(err.message)
                 });
         }else{
@@ -66,11 +81,26 @@ const Question = () => {
                 url: 'http://localhost:5000/answer',
                 data: data
                 }).then((res) => {
-                    console.log('sent')
+        
+                    store.addNotification({
+                        title: "Notification!",
+                        message: "Your answer has been submitted successfully",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            onScreen: true
+                        }
+                    });
                 }).catch(err => {
                     
                     console.log(err.message)
                 });
+
+                
         }
         
         
@@ -83,9 +113,10 @@ const Question = () => {
 
         
         <div className="tasks mt-5">
-
+        <ReactNotification  />
             {!isLoading && 
             <div className="container pt-5">
+                
                 <div className="row">
                     <div className="col-9 mx-auto">
                         
@@ -119,7 +150,7 @@ const Question = () => {
 
                         <div className="content-taskk bg-white p-4 shadow mb-5">
                            
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={ e => handleSubmit(e)}>
                                 <div className="row">
                                     <div className="col-12">
                                         <input className="form-control" type="text" id="repo" placeholder="Send Your Github Repo!" required

@@ -4,7 +4,7 @@ import userModel from "../models/user.js";
 // get asnwer by user id
 export const getAnswerById = async (req, res) =>{
 
-    console.log(req.body.id)
+
     answerModel.find({id_user: req.body.id}, (err, answer) => {
         if(err){
             res.send(err)
@@ -45,7 +45,6 @@ export const getAllAnswers = async (req, res) =>{
 //update topic
 
 export const updateAnswer = async (req, res) =>{
-    console.log(req.body)
     await answerModel.findByIdAndUpdate(req.body.id,
         {
             state: req.body.state,
@@ -77,14 +76,14 @@ export const updateAnswer = async (req, res) =>{
 
 
 export const getAnswerReview = async (req, res) =>{
-
-    const answers = await answerModel.find({id_problem: req.body.id, state: "In review"})
+    // console.log(req.body)
+    const answers = await answerModel.find({id_problem: req.body.id, id_user: req.body.id_user, state: "In review"})
     try {     
         res.status(200).json(answers);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-    console.log(req.body.id)
+
 }
 export const getAnswer= async (req, res) =>{
 
@@ -94,5 +93,5 @@ export const getAnswer= async (req, res) =>{
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-    console.log(req.body.id)
+
 }

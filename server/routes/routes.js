@@ -3,7 +3,7 @@ import { addAnswer, getAllAnswers, getAnswer, getAnswerById, getAnswerReview, up
 import { getAllPayments, getUserPayments, requestPayment, updatePaymentState, updatePoints } from '../controllers/paymentController.js';
 import { addProblem, deleteProblem, getAllProblems, getProblem, updateProblem } from '../controllers/problemController.js';
 import { addTopic, countTopic, deleteTopic, getAllTopics, updateTopic } from '../controllers/topicController.js';
-import { addUser, getAllUsers, getSingleUser, getUserDetails, updateEmail, updateUser, updatePassword, AdminUpdateUser, deleteUser } from '../controllers/userController.js';
+import { addUser, getAllUsers, getSingleUser, getUserDetails, updateEmail, updateUser, updatePassword, AdminUpdateUser, deleteUser, verifyOdlPassword } from '../controllers/userController.js';
 const router = express.Router();
 
 router.get('/', getAllUsers);
@@ -14,11 +14,14 @@ router.post('/updateUserDetails', getUserDetails);
 
 router.post('/update', updateUser);
 router.post('/updateemail', updateEmail);
-router.post('/updatepassword', updatePassword);
+
 
 router.post('/adminupdate', AdminUpdateUser);
 router.post('/admindelete', deleteUser);
 
+// password update
+router.post('/update/password/old', verifyOdlPassword);
+router.post('/updatepassword', updatePassword);
 
 //topics
 router.post('/topic', addTopic);

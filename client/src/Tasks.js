@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import LoadingBar from "./LoadingBar";
+import ReactPaginate from "react-paginate";
 
 
 
@@ -13,6 +14,10 @@ const Tasks = () => {
     const [problems, setProblems] = useState('');
     const [data , setData] = useState(true);
 
+    //pagination 
+    const [pageNumber, setPageNumber] = useState(0);
+    const postPerPage = 3;
+    const pagesVisited = pageNumber * postPerPage;
       
     useEffect(() => {
         
@@ -27,9 +32,16 @@ const Tasks = () => {
                 setData(false);
             })
         )
+        
 
     }, []);
 
+
+    const pageCount = Math.ceil(problems.length / postPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
+    
     if (data) return <div> <LoadingBar /> </div>
 
 
@@ -60,7 +72,7 @@ const Tasks = () => {
             <div className="container pt-5">
 
                 <div className="row">
-                    <div className="col-3 d-none d-md-block">
+                    <div className="col-3 all-topics d-none d-md-block overflow-auto">
      
                         
                         <ul className="list-topics">
@@ -71,8 +83,8 @@ const Tasks = () => {
                         </ul>
                     </div>
                     
-                    <div className="col-9 ">
-                    {problems.map((problem, index) => 
+                    <div className="col-9">
+                    {problems.slice(pagesVisited, pagesVisited + postPerPage).map((problem, index) => 
                         
                         <div className="content-task bg-white p-4 shadow mb-5" key={index} id={problem.id_topic.name}>
                             <Link to={`/task/${problem._id}`}>
@@ -95,6 +107,21 @@ const Tasks = () => {
                         </div>
         
                     )}
+                    {problems.length > 3 &&
+                    <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={"paginationBttns"}
+                    previousLinkClassName={"previousBttn"}
+                    nextLinkClassName={"nextBttn"}
+                    disabledClassName={"paginationDisabled"}
+                    activeClassName={"paginationActive"}
+                    />
+                }
                     </div>
      
                 </div>
